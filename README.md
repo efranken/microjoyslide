@@ -33,8 +33,8 @@ A Qwiic cable can also be used for one or both connections if your board support
 1.  Download MicroPython libraries listed in Software Requirements
 2.  Install mpremote, ensure it's in PATH to pick up environment var
 3.  Open a terminal
-4.  Copy main.py, joystick.py, trill libraries, and USB libraries (making sure to preserve file structure) to your board
-    - There are easier ways to do this, but for the sake of listing all commands for all files needed, follow these mpremote commands:
+4.  Copy main.py, joystick.py, trill libraries, and USB libraries (making sure to preserve file structure) to your board. 
+ There are other ways to do this, but for the sake of listing all commands for all files needed, follow these mpremote commands:
     - `mpremote cp main.py :main.py`
     - `mpremote cp joystick.py :joystick.py`
     - `mpremote mkdir usb`
