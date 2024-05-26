@@ -36,8 +36,9 @@ A Qwiic cable can also be used for one or both connections if your board support
 4.  Copy main.py, joystick.py, trill libraries, and USB libraries (making sure to preserve file structure) to your board
     - `mpremote cp main.py :main.py`
     - `mpremote cp joystick.py :joystick.py`
+    - `mpremote mkdir usb`
     - `mpremote mkdir usb\device`
-    - `mpremote cp usb.py :\usb\device\usb.py`
+    - `mpremote cp core.py :\usb\device\core.py`
     - `mpremote cp hid.py :\usb\device\hid.py`
     - `mpremote cp trill.py :trill.py`
     - `mpremote cp touch.py :touch.py`
