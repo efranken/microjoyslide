@@ -39,11 +39,12 @@ A Qwiic cable can also be used for one or both connections if your board support
 
 ## Software Installation
 
+** If not using haptic feedback, HAPTIC_PRESENCE can be set to False in main.py **
 1.  Download MicroPython libraries listed in Software Requirements
 2.  Install mpremote, ensure it's in PATH to pick up environment var
 3.  Open a terminal
-4.  Copy relevant main_*.py, joystick.py, and the USB libraries (making sure to preserve file structure)
-    - `mpremote cp main_*.py :main.py`
+4.  Copy relevant main.py, joystick.py, and the USB libraries (making sure to preserve file structure)
+    - `mpremote cp main.py :main.py`
     - `mpremote cp joystick.py :joystick.py`
     - `mpremote mkdir usb`
     - `mpremote mkdir usb\device`
