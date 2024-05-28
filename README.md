@@ -9,11 +9,10 @@ This is a MicroPython port of [bamtna's joyslide project](https://github.com/bam
 - Vibrating motor like [Adafruit 1201](https://www.adafruit.com/product/1201) if haptic feedback is desired
 - USB Cable
 
-## Software
-
-- [MicroPython usb-device-hid hid.py library](https://github.com/micropython/micropython-lib/tree/master/micropython/usb/usb-device-hid)
-- [MicroPython usb-device core.py library](https://github.com/micropython/micropython-lib/tree/master/micropython/usb/usb-device-hid)
-- [mpremote](https://pypi.org/project/mpremote/) (pip install mpremote)
+# Software:
+- [MicroPython usb-device-hid hid.py library](https://github.com/micropython/micropython-lib/tree/master/micropython/usb/usb-device-hid/usb/device)
+- [MicroPython usb-device __init__.py and core.py library](https://github.com/micropython/micropython-lib/tree/master/micropython/usb/usb-device/usb/device)
+- [MicroPythonTrill trill.py and touch.py libraries](https://github.com/Heerkog/MicroPythonTrill)
 
 ## Case
 [Bela's Trill Bar case](https://www.thingiverse.com/thing:5320767) is available here.
@@ -46,11 +45,17 @@ A Qwiic cable can also be used for one or both connections if your board support
 4.  Copy relevant main_*.py, joystick.py, and the USB libraries (making sure to preserve file structure)
     - `mpremote cp main_*.py :main.py`
     - `mpremote cp joystick.py :joystick.py`
+    - `mpremote mkdir usb`
     - `mpremote mkdir usb\device`
-    - `mpremote cp usb.py :\usb\device\usb.py`
+    - `mpremote cp core.py :\usb\device\core.py`
     - `mpremote cp hid.py :\usb\device\hid.py`
 5.  Reset the board with `mpremote soft-reset`
 6.  (optional) open up gamepad configuration to check if it all worked
+    - `mpremote cp __init__.py :\usb\device\__init__.py`
+    - `mpremote cp trill.py :trill.py`
+    - `mpremote cp touch.py :touch.py`
+6.  Reset the board with `mpremote soft-reset`
+7.  (optional) open up gamepad configuration to check if it all worked
 
 Serial monitor can be used to view logging.
 
