@@ -80,8 +80,42 @@ def turn_off_pin(timer):
     print("Pin turned off")
 
 
+def handle_steering(touch_location):
+    global PULSE_SENT
+    steering_value = SENSOR_CENTER
+
+    if touch_location <= THRESHOLD:
+        steering_value = SENSOR_MIN
+        PULSE_SENT = False
+    elif touch_location >= (SENSOR_MAX - THRESHOLD):
+        steering_value = SENSOR_MAX
+        PULSE_SENT = False
+    elif DEADZONE_START <= touch_location <= DEADZONE_END:
+        steering_value = SENSOR_CENTER
+        activate_haptic_if_needed()
+    else:
+        if touch_location < DEADZONE_START:
+            steering_value = map_value(touch_location, THRESHOLD, DEADZONE_START, SENSOR_MIN, SENSOR_CENTER)
+        else:
+            steering_value = map_value(touch_location, DEADZONE_END, SENSOR_MAX - THRESHOLD, SENSOR_CENTER, SENSOR_MAX)
+        PULSE_SENT = False
+
+    return steering_value
+
+
+def activate_haptic_if_needed():
+    global PULSE_SENT
+    if not PULSE_SENT:
+        print("Steering center - activating pin")
+        haptic_pin.value(1)
+        print("Pin turned on")
+        timer = Timer(-1)
+        timer.init(period=150, mode=Timer.ONE_SHOT, callback=turn_off_pin)
+        PULSE_SENT = True
+
+
 def loop():
-    global JOYSTICK, PULSE_SENT
+    global JOYSTICK
 
     try:
         touches = [{'location': -1, 'timestamp': 0, 'active': False} for _ in range(MAX_TOUCHES)]
@@ -124,38 +158,11 @@ def loop():
                 latest_touch_index = i
                 latest_timestamp = touches[i]['timestamp']
 
-        steering_value = SENSOR_CENTER
         if latest_touch_index != -1:
             touch_location = touches[latest_touch_index]['location']
-
-            if touch_location <= THRESHOLD:
-                steering_value = SENSOR_MIN
-                PULSE_SENT = False
-            elif touch_location >= (SENSOR_MAX - THRESHOLD):
-                steering_value = SENSOR_MAX
-                PULSE_SENT = False
-            elif touch_location >= DEADZONE_START and touch_location <= DEADZONE_END:
-                steering_value = SENSOR_CENTER
-                if not PULSE_SENT:
-                    print("Steering center - activating pin")
-
-                    # Turn on the pin (start the motor)
-                    haptic_pin.value(1)
-                    print("Pin turned on")
-
-                    # Create a timer object
-                    timer = Timer(-1)
-
-                    # Set up the timer to call the turn_off_pin function after 150 milliseconds
-                    timer.init(period=150, mode=Timer.ONE_SHOT, callback=turn_off_pin)
-
-                    PULSE_SENT = True
-            elif touch_location < DEADZONE_START:
-                steering_value = map_value(touch_location, THRESHOLD, DEADZONE_START, SENSOR_MIN, SENSOR_CENTER)
-                PULSE_SENT = False
-            else:
-                steering_value = map_value(touch_location, DEADZONE_END, SENSOR_MAX - THRESHOLD, SENSOR_CENTER, SENSOR_MAX)
-                PULSE_SENT = False
+            steering_value = handle_steering(touch_location)
+        else:
+            steering_value = SENSOR_CENTER
 
         joystick_value = map_value(steering_value, SENSOR_MIN, SENSOR_MAX, JOYSTICK_MIN, JOYSTICK_MAX)
         print(f"Steering value: {steering_value}, Joystick value: {joystick_value}")

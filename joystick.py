@@ -16,7 +16,7 @@ class JoystickInterface(HIDInterface):
 
     def send_joystick(self, x):
         value = x & 0xFF # converts signed to unsigned, 
-        print(f"Sending joystick value: {value}")
+        #print(f"Sending joystick value: {value}")
         self.send_report(bytes([value]))
 
 _JOYSTICK_REPORT_DESC = (
